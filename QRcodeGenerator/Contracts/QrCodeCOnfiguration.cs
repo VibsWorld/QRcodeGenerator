@@ -1,6 +1,6 @@
 ﻿namespace QRcodeGenerator.Contracts;
 
-public record QRCodeModel(Dictionary<string, string> QRCodes, int height = 250);
+public record QRCodeModel(string Image, QRCodeConfiguration Configuration);
 
 public class QRCodeConfiguration
 {

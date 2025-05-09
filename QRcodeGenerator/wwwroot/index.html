@@ -49,11 +49,13 @@
 
         $(document).ready(function () {
 
-            var qrCodeDict = {
-                "qrCodes": {
-                    "Url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAApQAAAKUAQAAAACStJWRAAACiklEQVR4nO3dUW6DMBAEUG7A/W/JDdIqimR7d0Egu5VaPX+V1MzHamfG44CzvZaPY4OpnnoJj2gI/eQdfNOawXrJWtE6WUaQj2RD2VA2lA1lQ9lQNpQNZUPZUDb8D9lwi2P/fJam7PVkmOqpl/CIhtDPJd7RPg+XR3/XB/NiMkz11Et4REPo56R39C62X8DVk2Gqp17CIxpCP3/EO1rmSiEcpnrqJTyiIfTzd73j7iVM9dRLeERD6Ocq76jt6W103+nr5hdDMNVTL+ERDaGfM94RRtjvq7b/hskw1VMv4RENoZ8LvKMa109G1AOmeuolPKIh9HPGO5L3hK26o7/s/zvcC1M99RIe0RD6Oecd7dZ+vy88szfsBlabgzDVUy/hEQ2hn3PekR7SG56C6J2tuoSpnnoJj2gI/VzlHenLpbjKSfY2/AVTPfUSHtEQ+rnAO9reXOVMKTidGh1M9dRLeERD6OeMd1Qhq/2juj/Mg6meegmPaAj9XOAdVUgqbiiPgICpnnoJj2gI/VzsHZUznbzOFMIYTPXUS3hEQ+jnAu8IMbuf254hv369FqZ66iU8oiH0c9o7qhHs7cavWcBUT72ERzSEfs55R+VdydRy+krcg6meegmPaAj9nPOOi2NXh8fHh1duH58ZDlM99RIe0RD6+fy3isJxDyFH5Xkw1VMv4RENoZ/rvSOdQvUGbhuBD99pgqmeegmPaAj9nPaOPK/feWsDpnrqJTyiIfRz2juqy/pLqHxwOEz11Et4REPo5xLvCCMg5YOI+tvOMhdM9dRLeERD6Ocz71g1YKqnXsIjGkI/eQfftGawXrJWtE6WEeQj2VA2lA1lQ9lQNpQNZUPZUDaUDf9wNvwC50p02usDtDYAAAAASUVORK5CYII="
-                },
-                "height": 300
+            var qrCodeConfiguration = {
+                "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAApQAAAKUAQAAAACStJWRAAACiklEQVR4nO3dUW6DMBAEUG7A/W/JDdIqimR7d0Egu5VaPX+V1MzHamfG44CzvZaPY4OpnnoJj2gI/eQdfNOawXrJWtE6WUaQj2RD2VA2lA1lQ9lQNpQNZUPZUDb8D9lwi2P/fJam7PVkmOqpl/CIhtDPJd7RPg+XR3/XB/NiMkz11Et4REPo56R39C62X8DVk2Gqp17CIxpCP3/EO1rmSiEcpnrqJTyiIfTzd73j7iVM9dRLeERD6Ocq76jt6W103+nr5hdDMNVTL+ERDaGfM94RRtjvq7b/hskw1VMv4RENoZ8LvKMa109G1AOmeuolPKIh9HPGO5L3hK26o7/s/zvcC1M99RIe0RD6Oecd7dZ+vy88szfsBlabgzDVUy/hEQ2hn3PekR7SG56C6J2tuoSpnnoJj2gI/VzlHenLpbjKSfY2/AVTPfUSHtEQ+rnAO9reXOVMKTidGh1M9dRLeERD6OeMd1Qhq/2juj/Mg6meegmPaAj9XOAdVUgqbiiPgICpnnoJj2gI/VzsHZUznbzOFMIYTPXUS3hEQ+jnAu8IMbuf254hv369FqZ66iU8oiH0c9o7qhHs7cavWcBUT72ERzSEfs55R+VdydRy+krcg6meegmPaAj9nPOOi2NXh8fHh1duH58ZDlM99RIe0RD6+fy3isJxDyFH5Xkw1VMv4RENoZ/rvSOdQvUGbhuBD99pgqmeegmPaAj9nPaOPK/feWsDpnrqJTyiIfRz2juqy/pLqHxwOEz11Et4REPo5xLvCCMg5YOI+tvOMhdM9dRLeERD6Ocz71g1YKqnXsIjGkI/eQfftGawXrJWtE6WEeQj2VA2lA1lQ9lQNpQNZUPZUDaUDf9wNvwC50p02usDtDYAAAAASUVORK5CYII=",
+                "configuration": {
+                    "name": "Sample QR Code Generator (Change its name from Configuration)",
+                    "height": 300,
+                    "url": "http://www.test.com"
+                }
             };
 
             $.ajaxSetup({
@@ -66,16 +68,13 @@
             let username = "", password = "", qrName = "", qrUrl = "", qrHeight = 250;
 
             let fnCheckForValidation = function () {
-                if ($("#txtUserName").val().trim() == ""
-                    || $("#txtPassword").val().trim() == ""
-                    || $("#txtQrName").val().trim() == ""
+                if (
+                     $("#txtQrName").val().trim() == ""
                     || $("#txtQRCodeUrl").val().trim() == ""
                     || $("#txtQrCodeHeight").val().trim() == "") {
                     return false;
                 }
                 else {
-                    username = window.btoa($("#txtUserName").val().trim());
-                    password = window.btoa($("#txtPassword").val().trim());
                     qrName = $("#txtQrName").val().trim();
                     qrUrl = $("#txtQRCodeUrl").val().trim();
                     qrHeight = parseInt($("#txtQrCodeHeight").val().trim());
@@ -89,12 +88,11 @@
                 var getUrl = `QrConfiguration/v1/GetQRCode`;
                 $.get(getUrl).done(function (data) {
                     console.log(data);
-
-                    $("#qrCodeImage").attr("src", data.qrCodes.Url);
-                    $("#qrCodeImage").width(data.height);
-
-
+                    $("#qrCodeImage").attr("src", data.image);
+                    $("#qrCodeImage").width(data.configuration.height);
                 })
+
+                
             }
 
 

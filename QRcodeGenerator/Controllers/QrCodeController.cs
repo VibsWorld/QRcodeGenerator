@@ -34,19 +34,8 @@ public class QrConfigurationController : ControllerBase
     {
         await Task.Delay(1);
         QRCodeConfiguration qrConfiguration = ReadQrCodeConfirgurationFromFile();
-
         logger.LogInformation("Code is now read from Qr Code");
-        var qrCodes = new Dictionary<string, string>
-        {
-            {
-                "Url",
-                GenerateQRCodeURL(
-                    qrConfiguration.Url
-                        ?? throw new NullReferenceException(nameof(qrConfiguration.Url))
-                )
-            },
-        };
-        var model = new QRCodeModel(qrCodes, qrConfiguration.Height);
+        var model = new QRCodeModel(GenerateQRCodeURL(qrConfiguration.Url!), qrConfiguration);
         return Ok(model);
     }
 
