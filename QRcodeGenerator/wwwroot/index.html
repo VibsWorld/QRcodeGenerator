@@ -13,11 +13,11 @@
                 <!-- LEFT COLUMN -->
                 <h2>Enter QR Code Configuration Details</h2>
                 <div>
-                    <div class="mb-3">
+                    <!--<div class="mb-3">
                         <label for="txtQrName" class="form-label">QR Code display name</label>
                         <input type="text" class="form-control" id="txtQrName" aria-describedby="txtQrNamelHelp" value="">
                         <div id="txtQrNamelHelp" class="form-text"></div>
-                    </div>
+                    </div>-->
                     <!--<div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="exampleCheck1">
                         <label class="form-check-label" for="exampleCheck1">Check me out</label>
@@ -85,12 +85,20 @@
 
             var fnGetDefaultQRCodeDetails = function () {
 
-                var getUrl = `QrConfiguration/v1/GetQRCode`;
+                var getUrl = `v1/GetQRCode`;
                 $.get(getUrl).done(function (data) {
                     console.log(data);
                     $("#qrCodeImage").attr("src", data.image);
+
                     $("#qrCodeImage").width(data.configuration.height);
-                })
+
+                    $("#txtQRCodeUrl").val(data.configuration.url);
+
+                    $("#txtQrCodeHeight").val(data.configuration.height);
+
+                }).fail(function (data) {
+                    alert("unable to get qr details. Check relative url in index.html line 88");
+                });
 
                 
             }
@@ -101,7 +109,7 @@
 
                 if (fnCheckForValidation() === true) {
 
-                    var postUrl = `/QrConfiguration/UpdateQrCodeConfigurationFile?UserName=${username}&UserCred=${password}`;
+                    var postUrl = `v1/UpdateQrCodeConfigurationFile`;
                     $.post(postUrl,
                         JSON.stringify({
                             "qRCodeConfiguration": {

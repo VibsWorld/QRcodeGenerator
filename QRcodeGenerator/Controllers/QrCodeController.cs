@@ -2,6 +2,7 @@
  Credits code-maze https://code-maze.com/aspnetcore-generate-qr-codes-with-qrcoder/?unapproved=62125&moderation-hash=e025997d320119429505d3f67289632d#comment-62125
  */
 
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using QRcodeGenerator;
 using QRcodeGenerator.Contracts;
@@ -11,7 +12,7 @@ using static QRCoder.PayloadGenerator;
 namespace QRcodeGenerator.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+//[Route("[controller]")]
 public class QrConfigurationController : ControllerBase
 {
     private readonly ILogger<QrConfigurationController> logger;
@@ -29,7 +30,7 @@ public class QrConfigurationController : ControllerBase
     }
 
     [HttpGet]
-    [Route("v1/GetQRCode")]
+    [Route("/v1/GetQRCode")]
     public async Task<IActionResult> GetQRCode()
     {
         await Task.Delay(1);
@@ -40,9 +41,9 @@ public class QrConfigurationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("v1/UpdateQrCodeConfigurationFile")]
+    [Route("/v1/UpdateQrCodeConfigurationFile")]
     public async Task<IActionResult> UpdateQrCodeConfigurationFile(
-        QRCodeConfiguration qRCodeConfiguration
+        [FromBody, Required] QRCodeConfiguration qRCodeConfiguration
     )
     {
         await Task.Delay(1);
