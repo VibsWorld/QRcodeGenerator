@@ -1,4 +1,3 @@
-
 namespace QRcodeGenerator
 {
     public class Program
@@ -13,6 +12,7 @@ namespace QRcodeGenerator
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddSingleton(x => new JsonReaderAndWriter());
 
             var app = builder.Build();
 
@@ -26,7 +26,6 @@ namespace QRcodeGenerator
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
