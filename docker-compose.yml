@@ -1,0 +1,6 @@
+services:
+  qrcodegenerator:
+    image: ${DOCKER_REGISTRY-}qrcodegenerator
+    build:
+      context: .
+      dockerfile: QRcodeGenerator/Dockerfile

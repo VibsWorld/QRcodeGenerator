@@ -95,7 +95,7 @@
                     console.log(data);
                     $("#qrCodeImage").attr("src", data.image);
 
-                    $("#qrCodeImage").width(data.configuration.height);
+                    $("#qrCodeImage").height(data.configuration.height);
 
                     $("#txtQRCodeUrl").val(data.configuration.url);
 
@@ -125,6 +125,7 @@
                         .done(function (data) {
                             $("#divAlert").show();
                             $("#divAlert").slideUp(2000);
+                            fnGetDefaultQRCodeDetails();
                             
                         })
                         .fail(function (errorData) {
