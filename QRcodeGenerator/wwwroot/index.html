@@ -1,19 +1,143 @@
-﻿<!DOCTYPE html>
-<html>
+﻿<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>QR Code Generator</title>
-    <script src="jquery-3.7.1.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QR Code Configuration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-    <div id="divResult"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <!-- LEFT COLUMN -->
+                <h2>Enter QR Code Configuration Details</h2>
+                <div>
+                    <div class="mb-3">
+                        <label for="txtQrName" class="form-label">QR Code display name</label>
+                        <input type="text" class="form-control" id="txtQrName" aria-describedby="txtQrNamelHelp" value="">
+                        <div id="txtQrNamelHelp" class="form-text"></div>
+                    </div>
+                    <!--<div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>-->
+                    <div class="mb-3">
+                        <label for="txtQRCodeUrl" class="form-label">Web address</label>
+                        <input type="text" class="form-control" id="txtQRCodeUrl" value="" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtQrCodeHeight" class="form-label">QR code height (in pixels)</label>
+                        <input type="number" class="form-control" id="txtQrCodeHeight" aria-describedby="txtQrCodeHeightlHelp" value="" />
+                        <div id="txtQrCodeHeightlHelp" class="form-text">should be a numeric value</div>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btnSubmit">Submit</button>
+                </div>
+            </div>
+
+
+            <div class="col">
+                <img id="qrCodeImage" />
+            </div>
+
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $("#divResult").html("<b>loaded</b>");
+
+            var qrCodeDict = {
+                "qrCodes": {
+                    "Url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAApQAAAKUAQAAAACStJWRAAACiklEQVR4nO3dUW6DMBAEUG7A/W/JDdIqimR7d0Egu5VaPX+V1MzHamfG44CzvZaPY4OpnnoJj2gI/eQdfNOawXrJWtE6WUaQj2RD2VA2lA1lQ9lQNpQNZUPZUDb8D9lwi2P/fJam7PVkmOqpl/CIhtDPJd7RPg+XR3/XB/NiMkz11Et4REPo56R39C62X8DVk2Gqp17CIxpCP3/EO1rmSiEcpnrqJTyiIfTzd73j7iVM9dRLeERD6Ocq76jt6W103+nr5hdDMNVTL+ERDaGfM94RRtjvq7b/hskw1VMv4RENoZ8LvKMa109G1AOmeuolPKIh9HPGO5L3hK26o7/s/zvcC1M99RIe0RD6Oecd7dZ+vy88szfsBlabgzDVUy/hEQ2hn3PekR7SG56C6J2tuoSpnnoJj2gI/VzlHenLpbjKSfY2/AVTPfUSHtEQ+rnAO9reXOVMKTidGh1M9dRLeERD6OeMd1Qhq/2juj/Mg6meegmPaAj9XOAdVUgqbiiPgICpnnoJj2gI/VzsHZUznbzOFMIYTPXUS3hEQ+jnAu8IMbuf254hv369FqZ66iU8oiH0c9o7qhHs7cavWcBUT72ERzSEfs55R+VdydRy+krcg6meegmPaAj9nPOOi2NXh8fHh1duH58ZDlM99RIe0RD6+fy3isJxDyFH5Xkw1VMv4RENoZ/rvSOdQvUGbhuBD99pgqmeegmPaAj9nPaOPK/feWsDpnrqJTyiIfRz2juqy/pLqHxwOEz11Et4REPo5xLvCCMg5YOI+tvOMhdM9dRLeERD6Ocz71g1YKqnXsIjGkI/eQfftGawXrJWtE6WEeQj2VA2lA1lQ9lQNpQNZUPZUDaUDf9wNvwC50p02usDtDYAAAAASUVORK5CYII="
+                },
+                "height": 300
+            };
+
+            $.ajaxSetup({
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+
+            let username = "", password = "", qrName = "", qrUrl = "", qrHeight = 250;
+
+            let fnCheckForValidation = function () {
+                if ($("#txtUserName").val().trim() == ""
+                    || $("#txtPassword").val().trim() == ""
+                    || $("#txtQrName").val().trim() == ""
+                    || $("#txtQRCodeUrl").val().trim() == ""
+                    || $("#txtQrCodeHeight").val().trim() == "") {
+                    return false;
+                }
+                else {
+                    username = window.btoa($("#txtUserName").val().trim());
+                    password = window.btoa($("#txtPassword").val().trim());
+                    qrName = $("#txtQrName").val().trim();
+                    qrUrl = $("#txtQRCodeUrl").val().trim();
+                    qrHeight = parseInt($("#txtQrCodeHeight").val().trim());
+                    return true;
+                }
+
+            }
+
+            var fnGetDefaultQRCodeDetails = function () {
+
+                var getUrl = `QrConfiguration/v1/GetQRCode`;
+                $.get(getUrl).done(function (data) {
+                    console.log(data);
+
+                    $("#qrCodeImage").attr("src", data.qrCodes.Url);
+                    $("#qrCodeImage").width(data.height);
 
 
-        });
+                })
+            }
+
+
+            $(document).on("click", "#btnSubmit", function () {
+
+
+                if (fnCheckForValidation() === true) {
+
+                    var postUrl = `/QrConfiguration/UpdateQrCodeConfigurationFile?UserName=${username}&UserCred=${password}`;
+                    $.post(postUrl,
+                        JSON.stringify({
+                            "qRCodeConfiguration": {
+                                "Name": qrName,
+                                "Height": qrHeight,
+                                "Url": qrUrl
+                            }
+                        }))
+                        .done(function (data) {
+                            alert(data);
+                        })
+                        .fail(function (errorData) {
+                            console.error(errorData);
+                        });
+
+
+                }
+                else {
+                    alert("unable to send request to server due to invalid input data");
+                }
+            });
+
+
+
+            //Default Initializers
+            fnGetDefaultQRCodeDetails();
+
+
+        }); //End of Document ready
+
+
+
+
+
     </script>
 </body>
 </html>

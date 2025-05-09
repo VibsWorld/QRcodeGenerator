@@ -39,8 +39,7 @@ public class QrConfigurationController : ControllerBase
         var qrCodes = new Dictionary<string, string>
         {
             {
-                qrConfiguration.Name
-                    ?? throw new NullReferenceException(nameof(qrConfiguration.Name)),
+                "Url",
                 GenerateQRCodeURL(
                     qrConfiguration.Url
                         ?? throw new NullReferenceException(nameof(qrConfiguration.Url))

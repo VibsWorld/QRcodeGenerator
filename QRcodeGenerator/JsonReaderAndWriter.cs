@@ -39,7 +39,7 @@ namespace QRcodeGenerator
                     Path.Combine(dataDirectoryPath, fileName),
                     JsonSerializer.Serialize(
                         obj,
-                        new JsonSerializerOptions { WriteIndented = true }
+                        options: new JsonSerializerOptions { WriteIndented = true }
                     )
                 );
         }
