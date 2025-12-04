@@ -27,4 +27,8 @@ RUN dotnet publish "./QRcodeGenerator.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+USER root
+RUN mkdir -p /app/AppData && chown -R app:app /app/AppData
+#RUN chmod -R 777 ./AppData
+USER app
 ENTRYPOINT ["dotnet", "QRcodeGenerator.dll"]

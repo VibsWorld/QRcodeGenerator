@@ -37,10 +37,7 @@ namespace QRcodeGenerator
             lock (lockChecker)
                 File.WriteAllText(
                     Path.Combine(dataDirectoryPath, fileName),
-                    JsonSerializer.Serialize(
-                        obj,
-                        options: new JsonSerializerOptions { WriteIndented = true }
-                    )
+                    JsonSerializer.Serialize(obj, options: new() { WriteIndented = true })
                 );
         }
     }
